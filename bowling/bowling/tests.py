@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
-from .score import generate, MAX_PINS
+from .score import generate, MAX_PINS, MAX_FRAMES
 
 
 def get(url, data=None):
@@ -254,3 +254,21 @@ class RESTTestCase(TestCase):
         self.assertGreaterEqual(roll_response2.status_code, 400,
                                 msg="Invalid status code %d" % roll_response2.status_code)
         self.assertIn("roll", roll_response2.data, msg="No roll error message in response")
+
+    def test_all_strike(self):
+        game_response = post(reverse('game'))
+        self.assertEqual(game_response.status_code, 200, msg="Invalid status code %d" % game_response.status_code)
+
+        rolls = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
+
+        for index, roll in enumerate(rolls):
+            roll_response = post(reverse('roll'), {
+                'game': game_response.data['game'],
+                'roll': roll
+            })
+
+            self.assertEqual(roll_response.status_code, 200, msg="Invalid status code %d" % roll_response.status_code)
+
+            if index == len(rolls) - 1:
+                self.assertEqual(len(roll_response.data['score']), MAX_FRAMES, msg="Invalid number of frames!")
+                self.assertEqual(roll_response.data['score'][9]['score'], 300, msg="Invalid score!")

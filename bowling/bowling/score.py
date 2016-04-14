@@ -54,7 +54,7 @@ class Frame(object):
         :type prev_score: int
         """
         if number > MAX_FRAMES:
-            raise Exception("You cannot have more then %d frames in a game!" % MAX_FRAMES)
+            raise Exception("You cannot have more than a %d frames in a game!" % MAX_FRAMES)
 
         self._number = number  # Frame number 1-MAX_FRAMES
         self._end_frame = number == MAX_FRAMES  # Is it the end frame = MAX_FRAMES
@@ -126,7 +126,7 @@ class Frame(object):
     @property
     def rolls_completed(self):
         """
-        Returns true if all 2 or 1 strike rolls are added
+        Returns true if frame cannot accept more rolls
         :rtype: bool
         """
         return self._rolls_completed
@@ -225,15 +225,12 @@ class Frame(object):
         Returns true if Frame have all rolls added
         :rtype: bool
         """
-        if self.end_frame and (self.strike or self.spare) and self._rolls_count == 3:
+        if self.end_frame and (self.strike or self.spare):
             # On the end frame if we have strike or spare we have max 3 rolls
-            return True
-        elif not self.end_frame and self.strike and self._rolls_count == 1:
+            return self._rolls_count == 3
+        elif not self.end_frame and self.strike:
             # On any frame except end one if he have strike we cannot accept another
-            return True
-        elif self._rolls_count == 2:
-            # On any frame without strike we need only 2 rolls
-            return True
+            return self._rolls_count == 1
         else:
-            # Otherwise we accept more rolls
-            return False
+            # Otherwise we expect 2 rolls
+            return self._rolls_count == 2
