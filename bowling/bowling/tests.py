@@ -22,8 +22,8 @@ def generate_rolls(expected):
     return expected, [r2 for r1 in expected for r2 in r1['rolls']]
 
 
-def validate_score(case, expected, score):
-    for index, frame in enumerate(score):
+def validate_score(case, expected, frames):
+    for index, frame in enumerate(frames):
         # Used for both Frame object and response from the api
         rolls = frame.rolls if hasattr(frame, 'rolls') else frame['rolls']
         number = frame.number if hasattr(frame, 'number') else frame['number']
@@ -55,6 +55,7 @@ def validate_score(case, expected, score):
             msg='Not completed %d' % index
         )
 
+    case.assertEqual(len(frames), len(expected), msg='Different frame length')
 
 DELASPORT_ROLLS = [
     {'rolls': [1, 4], 'score': 5, 'number': 1},

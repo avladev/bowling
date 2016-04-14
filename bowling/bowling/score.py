@@ -174,7 +174,7 @@ class Frame(object):
         self._score = self._prev_score + self._rolls_sum + self._next_rolls_sum
 
         self._completed = self._calculate_completed()
-        self._rolls_completed = self._rolls_count == 2 or (self._strike and self._rolls_count == 1)
+        self._rolls_completed = self._calculate_rolls_completed()
 
     def _calculate_completed(self):
         """
@@ -219,3 +219,21 @@ class Frame(object):
         else:
             # Everything else
             return MAX_PINS
+
+    def _calculate_rolls_completed(self):
+        """
+        Returns true if Frame have all rolls added
+        :rtype: bool
+        """
+        if self.end_frame and (self.strike or self.spare) and self._rolls_count == 3:
+            # On the end frame if we have strike or spare we have max 3 rolls
+            return True
+        elif not self.end_frame and self.strike and self._rolls_count == 1:
+            # On any frame except end one if he have strike we cannot accept another
+            return True
+        elif self._rolls_count == 2:
+            # On any frame without strike we need only 2 rolls
+            return True
+        else:
+            # Otherwise we accept more rolls
+            return False
