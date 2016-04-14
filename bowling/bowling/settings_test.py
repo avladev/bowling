@@ -1,5 +1,6 @@
 from .settings import *
 
+DEBUG = True
 TESTING = True
 DATABASES = {
     'default': {
