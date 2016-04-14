@@ -1,0 +1,14 @@
+server {
+    listen 80;
+    server_name delasport.avladev.name;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/bowling/bowling;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/bowling/bowling/bowling.sock;
+    }
+}

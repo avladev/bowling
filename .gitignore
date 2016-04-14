@@ -2,6 +2,7 @@
 /.idea
 /.vagrant
 /bowling/db.sqlite3
+/bowling/static/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
