@@ -54,7 +54,7 @@ class Frame(object):
         :type prev_score: int
         """
         if number > MAX_FRAMES:
-            raise Exception("You cannot have more then %d frames in a game!" % number)
+            raise Exception("You cannot have more then %d frames in a game!" % MAX_FRAMES)
 
         self._number = number  # Frame number 1-MAX_FRAMES
         self._end_frame = number == MAX_FRAMES  # Is it the end frame = MAX_FRAMES
