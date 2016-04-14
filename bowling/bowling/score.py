@@ -17,8 +17,16 @@ def generate(rolls):
 
     for index, roll in enumerate(rolls):
         if frame.end_frame and frame.completed:
-            if not frame.strike and not frame.spare and index <= rolls_count - 1:
-                raise Exception('Frames exceeded')
+            # If the last frame is completed in strike or spare
+            # we've read this rolls ahead of time so we want to skip them because they will add new frames
+            # But we still need to throw an Exception if there are more rolls added by the user
+            rolls_diff = rolls_count - index
+
+            if (frame.strike and rolls_diff > 2) or \
+                    (frame.spare and rolls_diff > 1) or \
+                    (not frame.strike and not frame.spare and rolls_diff > 0):
+                raise Exception("You cannot have more than a %d frames in a game!" % MAX_FRAMES)
+
             continue
 
         frame = Frame(frame.number + 1, frame.score) if frame.rolls_completed else frame

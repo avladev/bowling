@@ -172,6 +172,22 @@ class ScoreTestCase(TestCase):
 
         self.assertRaises(Exception, generate, rolls)
 
+    def test_strike_max_frames(self):
+        rolls = [
+            10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
+            10, 10, 10
+        ]
+
+        self.assertRaises(Exception, generate, rolls)
+
+    def test_spare_strike_max_frames(self):
+        rolls = [
+            5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+            10, 1
+        ]
+
+        self.assertRaises(Exception, generate, rolls)
+
 
 class RESTTestCase(TestCase):
     def test_create_game_success(self):
